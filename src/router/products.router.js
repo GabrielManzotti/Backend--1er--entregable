@@ -1,12 +1,9 @@
-import express from 'express'
-import { productManager } from './script2doEntregable.js'
-
-const app = express()
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+import { Router } from 'express'
+import { productManager } from '../entities/script2doEntregable.js'
+const router = Router()
 
 
-app.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const products = await productManager.getProducts(req.query)
         if (!products) {
@@ -20,7 +17,7 @@ app.get('/products', async (req, res) => {
 })
 
 
-app.get('/products/:pid', async (req, res) => {
+router.get('/:pid', async (req, res) => {
     const { pid } = req.params
     try {
         const product = await productManager.getProductsById(+pid)
@@ -35,9 +32,10 @@ app.get('/products/:pid', async (req, res) => {
     }
 })
 
-app.post('/products', async (req, res) => {
-    const { title, description, price, thumbnail, code, stock } = req.body
-    if (!title || !description || !price || !thumbnail || !code || !stock) {
+router.post('/', async (req, res) => {
+    const { title, description, code, price, status, stock, category, thumbnail, } = req.body
+    if (!title || !description || !price || !code || !stock || !status || !category) {
+        console.log("entra een if", req.body)
         return res.status(200).json({ message: 'Some data is missing' })
     }
     try {
@@ -49,7 +47,7 @@ app.post('/products', async (req, res) => {
 }
 )
 
-app.post('/products/delete/:pid', async (req, res) => {
+router.post('/delete/:pid', async (req, res) => {
     const { pid } = req.params
     try {
         const deleteProduct = await productManager.deleteProductByID(+pid)
@@ -65,9 +63,9 @@ app.post('/products/delete/:pid', async (req, res) => {
 }
 )
 
-app.post('/products/update/:pid', async (req, res) => {
+router.post('/update/:pid', async (req, res) => {
     const { pid } = req.params
-    const { title, description, price, thumbnail, stock } = req.body
+    const { title, description, price, thumbnail, stock, status, category } = req.body
     const updateProduct = await productManager.updateProductByID(+pid, req.body)
     try {
         if (updateProduct === "no existe el producto") {
@@ -83,7 +81,4 @@ app.post('/products/update/:pid', async (req, res) => {
 }
 )
 
-
-app.listen(8080, () => {
-    console.log('Escuchando al puerto 8080')
-})
+export default router
