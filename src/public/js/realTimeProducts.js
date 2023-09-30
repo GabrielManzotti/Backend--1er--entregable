@@ -3,9 +3,11 @@ let products = [];
 
 const productsList = document.getElementById("productsList")
 const addProductForm = document.getElementById("addProductForm")
+const updateProduct = document.getElementById("updateProduct")
 const deleteForm = document.getElementById("deleteForm")
+const error = document.getElementById("error")
 
-socketClient.emit("getAllProducts");
+socketClient.emit("getProducts");
 
 const validaProd = (obj) => {
     if ((!obj.title) || (!obj.description) || (!obj.price) || (!obj.code) || (!obj.stock) || (!obj.category)) {
@@ -28,13 +30,11 @@ addProductForm.onsubmit = (e) => {
     };
     if (validaProd(newProduct)) {
         addNewProduct(newProduct)
-        console.log("ejecuta addnewprod");
-        socketClient.emit("getAllProducts");
-    } else {
-        console.log("faltan datos   ")
+        error.innerHTML = `<p></p>`
     }
-
-
+    else {
+        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
+    }
 }
 
 async function addNewProduct(product) {
@@ -46,9 +46,54 @@ async function addNewProduct(product) {
             },
             body: JSON.stringify(product),
         });
-
+        if (result) {
+            socketClient.emit("getProducts");
+        }
     } catch (error) {
+        error
+    }
+}
 
+const validaUpdate = (obj) => {
+    if ((!obj.title) || (!obj.description) || (!obj.stock) || (!obj.category)) {
+        return false
+    }
+    else {
+        return true
+    }
+}
+
+updateProduct.onsubmit = (e) => {
+    e.preventDefault()
+    let idUpdate = document.getElementById("updateProductId").value
+    let updateProduct = {
+        title: document.getElementById("updateProductTitle").value,
+        description: document.getElementById("updateProductDescription").value,
+        price: document.getElementById("updateProductPrice").value,
+        stock: document.getElementById("updateProductStock").value,
+        category: document.getElementById("updateProductCategory").value
+    }
+    if (validaUpdate(updateProduct)) {
+        updateProductFunc(idUpdate, updateProduct)
+        error.innerHTML = `<p></p>`
+    } else {
+        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
+    }
+
+
+}
+
+async function updateProductFunc(id, obj) {
+    try {
+        const result = await fetch(`http://localhost:8080/api/products/update/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(obj),
+        });
+        result ? socketClient.emit("getProducts") : null
+    } catch (error) {
         error
     }
 }
@@ -58,42 +103,46 @@ deleteForm.onsubmit = (e) => {
     let deleteProdID = document.getElementById("deleteProductId").value
     if (deleteProdID) {
         deleteProduct(deleteProdID);
-        socketClient.emit("getAllProducts");
+        error.innerHTML = `<p></p>`
+    }
+    else {
+        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
     }
 }
 
 async function deleteProduct(productId) {
     try {
         const result = await fetch(`http://localhost:8080/api/products/delete/${productId}`, {
-            method: "POST",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
             },
-
-        });
+        })
+        if (result) {
+            socketClient.emit("getProducts");
+        };
     } catch (error) {
         error
     }
 }
 
-function compileProducts() {
-    const productsTemplate = products
-        .map(
-            (product) => `<li>
+function printProducts() {
+    const productsToPrint = products.map(
+        (product) => `<li>
         <p>ID: ${product.id}</p> 
         <p>Title: ${product.title}</p> 
         <p>Description: ${product.description}</p> 
         <p>Price: ${product.price}</p> 
         <p>Code: ${product.code}</p> 
         <p>Stock: ${product.stock}</p>
+        <p>Category: ${product.category}</p>
       </li>`
-        )
+    )
         .join(" ");
-    productsList.innerHTML = productsTemplate;
+    productsList.innerHTML = productsToPrint;
 }
 
 socketClient.on("updatedProducts", (_products) => {
     products = _products;
-    console.log("product deentro de socketclient", products);
-    compileProducts()
+    printProducts()
 });

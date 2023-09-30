@@ -5,7 +5,6 @@ import { __dirname } from './utils.js'
 import { engine } from 'express-handlebars';
 import viewsRouter from './router/views.router.js'
 import { Server } from 'socket.io';
-import { getAllProductsHandler } from './handlers/realtimeTimeProductsHandlers.js';
 import { productManager } from './entities/script2doEntregable.js';
 
 const app = express()
@@ -37,9 +36,10 @@ const onConnection = async (socket) => {
 
 socketServer.on("connection", (socket) => {
     console.log("cliente conectado", socket.id);
-    socket.on("getAllProducts", async () => {
+    socket.on("getProducts", async () => {
         const products = await productManager.getProducts();
         socketServer.emit("updatedProducts", products);
-        console.log("Prod server", products);
     });
 })
+
+
