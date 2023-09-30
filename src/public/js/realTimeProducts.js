@@ -54,8 +54,8 @@ async function addNewProduct(product) {
     }
 }
 
-const validaUpdate = (obj) => {
-    if ((!obj.title) || (!obj.description) || (!obj.stock) || (!obj.category)) {
+const validaUpdate = (id, obj) => {
+    if ((!id) || (!obj.title) || (!obj.description)) {
         return false
     }
     else {
@@ -70,10 +70,8 @@ updateProduct.onsubmit = (e) => {
         title: document.getElementById("updateProductTitle").value,
         description: document.getElementById("updateProductDescription").value,
         price: document.getElementById("updateProductPrice").value,
-        stock: document.getElementById("updateProductStock").value,
-        category: document.getElementById("updateProductCategory").value
     }
-    if (validaUpdate(updateProduct)) {
+    if (validaUpdate(idUpdate, updateProduct)) {
         updateProductFunc(idUpdate, updateProduct)
         error.innerHTML = `<p></p>`
     } else {

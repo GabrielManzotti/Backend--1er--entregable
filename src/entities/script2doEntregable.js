@@ -74,8 +74,9 @@ class ProductManager {
             }
             else {
                 const indiceElemento = products.findIndex(e => e.id === id)
+                let nuevoProd = Object.assign(products[indiceElemento], actualizacion)
                 let nuevoProducts = [...products]
-                nuevoProducts[indiceElemento] = { ...nuevoProducts[indiceElemento], title: actualizacion.title, description: actualizacion.description, price: actualizacion.price, thumbnail: validaCode.thumbnail, code: validaCode.code, stock: actualizacion.stock, status: validaCode.status, category: actualizacion.category }
+                nuevoProducts[indiceElemento] = { ...nuevoProd }
                 products = nuevoProducts
                 await fs.promises.writeFile(this.path, JSON.stringify(products))
                 return 'producto actualizado'
