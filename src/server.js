@@ -5,7 +5,9 @@ import { __dirname } from './utils.js'
 import { engine } from 'express-handlebars';
 import viewsRouter from './router/views.router.js'
 import { Server } from 'socket.io';
-import { productManager } from './entities/script2doEntregable.js';
+import { productManager } from './dao/entities/script2doEntregable.js';
+
+import './db/config.js'
 
 const app = express()
 
@@ -28,7 +30,6 @@ const httpServer = app.listen(8080, () => {
 
 //websocket -server
 const socketServer = new Server(httpServer)
-
 
 const onConnection = async (socket) => {
     await getAllProductsHandler(socketServer, socket)

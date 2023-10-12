@@ -2,16 +2,12 @@ import { Router } from "express";
 
 const router = Router()
 
-router.get('/vista1', (req, res) => {
-    res.render('vista1')
-})
-
-router.get('/vista2', (req, res) => {
-    res.render('vista2')
-})
-
 router.get("/", (req, res) => {
     res.render('createProducts')
+})
+
+router.get('/productsList', (req, res) => {
+    res.render('productsList')
 })
 
 router.get('/websocket', (req, res) => {
@@ -23,7 +19,7 @@ router.get('/home', (req, res) => {
 })
 
 router.get('/realtimeproducts', (req, res) => {
-    res.render('realTimeProducts')
+    res.render('realTimeProducts', { style: 'realTimeProducts.css' })
 })
 
 

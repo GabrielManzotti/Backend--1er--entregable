@@ -1,18 +1,35 @@
-<h2>Signup</h2>
-<form action="/api/products" method="post">
+<h2>Create a product</h2>
+<div id="errorCreate"></div>
+<form id="createProduct">
   title:
   <input type="text" name="title" id="title" />
   description
   <input type="text" name="description" id="description" />
-  price
-  <input type="number" name="price" id="price" />
   code
   <input type="text" name="code" id="code" />
+  price
+  <input type="number" name="price" id="price" />
+  status
+  <input type="text" name="status" id="status" />
   stock
   <input type="number" name="stock" id="stock" />
-  status
-  <input type="checkbox" name="status" id="status" />
   category
   <input type="text" name="category" id="category" />
-  <input type="submit" value="SIGNUP" />
+  thumbnail
+  <input type="text" name="thumbnail" id="thumbnail">
+  <input type="submit" value="CREATE" />
 </form>
+
+<h2>Update a product</h2>
+<div id="errorUpdate"></div>
+<form id="updateProduct">
+<input type="text" name="updateId" id="updateId" placeholder="id">
+<input type="number" name="updatePrice" id="updatePrice" placeholder="Price">
+<input type="text" name="updateStatus" id="updateStatus" placeholder="Status">
+<input type="number" name="updateStock" id="updateStock" placeholder="Stock">
+<input type="submit" value="UPDATE" />
+</form>
+
+<div id="productList"></div>
+
+<script type="module" src="/js/createProducts.js"></script>

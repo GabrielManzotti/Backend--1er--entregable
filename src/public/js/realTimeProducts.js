@@ -33,7 +33,7 @@ addProductForm.onsubmit = (e) => {
         error.innerHTML = `<p></p>`
     }
     else {
-        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
+        error.innerHTML = `<p class="error">--- ERROR: Data is missing ---</p>`
     }
 }
 
@@ -75,7 +75,7 @@ updateProduct.onsubmit = (e) => {
         updateProductFunc(idUpdate, updateProduct)
         error.innerHTML = `<p></p>`
     } else {
-        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
+        error.innerHTML = `<p class="error">--- ERROR: Data is missing ---</p>`
     }
 
 
@@ -104,7 +104,7 @@ deleteForm.onsubmit = (e) => {
         error.innerHTML = `<p></p>`
     }
     else {
-        error.innerHTML = `<p>--- ERROR: Data is missing ---</p>`
+        error.innerHTML = `<p class="error">--- ERROR: Data is missing ---</p>`
     }
 }
 
