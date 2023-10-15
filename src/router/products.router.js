@@ -20,10 +20,15 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const products = await productsManager.findAll()
-        return res.status(200).json({ message: "products", Products: products })
+        const products = await productsManager.findAll(req.query)
+        if (products) {
+            return res.status(200).json({ message: "products", Products: products })
+        } else {
+            return res.status(404).json({ message: "no found produducts" })
+        }
+
     } catch (error) {
-        return res.status(500).json({ error: err.message })
+        return res.status(500).json({ message: "error!" })
     }
 })
 
@@ -31,9 +36,29 @@ router.get('/:idProduct', async (req, res) => {
     const { idProduct } = req.params
     try {
         const product = await productsManager.findById(idProduct)
-        return res.status(200).json({ message: "Product", Product: product })
+
+        if (product) {
+            return res.status(200).json({ message: "Product", Product: product })
+        } else {
+            return res.status(400).json({ message: "no found produducts" })
+        }
     } catch (error) {
-        return res.status(500).json({ error: err.message })
+        return res.status(500).json({ message: "error!" })
+    }
+})
+
+router.get('/category/:category', async (req, res) => {
+    const { category } = req.params
+    try {
+        const result = await productsManager.findById(category)
+
+        if (result) {
+            return res.status(200).json({ message: "Product", Products: result })
+        } else {
+            return res.status(400).json({ message: "no found produducts" })
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "error!" })
     }
 })
 
@@ -43,7 +68,7 @@ router.put('/update/:idProduct', async (req, res) => {
         const updatedProduct = await productsManager.updateOne(idProduct, req.body)
         return res.status(200).json({ message: "Product updated", Product: updatedProduct })
     } catch (error) {
-        return res.status(500).json({ error: err.message })
+        return res.status(500).json({ message: "error!" })
     }
 })
 

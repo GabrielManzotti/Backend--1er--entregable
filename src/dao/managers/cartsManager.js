@@ -2,7 +2,7 @@ import { cartsModel } from "../../db/models/cart.models.js";
 
 class CartManager {
     async findAll() {
-        return cartsModel.find()
+        return cartsModel.find().lean()
     }
     async findById(id) {
         return cartsModel.findById(id)
@@ -32,7 +32,6 @@ class CartManager {
     }
 
     async deleteOne(id) {
-        console.log("id", id);
         return cartsModel.deleteOne({ _id: id });
     }
 }

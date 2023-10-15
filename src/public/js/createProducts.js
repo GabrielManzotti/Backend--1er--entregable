@@ -1,9 +1,13 @@
 
 const createProduct = document.getElementById("createProduct")
 const updateProduct = document.getElementById("updateProduct")
+const deleteProduct = document.getElementById("deleteProduct")
 const errorCreate = document.getElementById("errorCreate")
 const errorUpdate = document.getElementById("errorUpdate")
+const errorDelete = document.getElementById("errorDelete")
 const updateId = document.getElementById("updateId")
+const deleteId = document.getElementById("deleteId")
+
 
 const validaProd = (obj) => {
     if ((!obj.title) || (!obj.description) || (!obj.price) || (!obj.code) || (!obj.stock) || (!obj.category)) {
@@ -68,7 +72,7 @@ updateProduct.onsubmit = (e) => {
         updateAProduct(id, updateProd)
         window.location.replace("http://localhost:8080/api/productsList")
     } else {
-        errorUpdate.innerHTML = `<p>Some data is missing</p>`
+        errorDelete.innerHTML = `<p>Some data is missing</p>`
     }
 }
 
@@ -81,7 +85,39 @@ async function updateAProduct(id, updateProd) {
             },
             body: JSON.stringify(updateProd),
         });
-        errorUpdate.innerHTML = `<p></p>`
+        errorDelete.innerHTML = `<p></p>`
+    } catch (error) {
+        error
+    }
+}
+
+const validaDelete = (id) => {
+    if (id) {
+        return true
+    } else {
+        return false
+    }
+}
+
+deleteProduct.onsubmit = (e) => {
+    e.preventDefault()
+    let id = deleteId.value
+    if (validaDelete(id)) {
+        deleteAProduct(id)
+        window.location.replace("http://localhost:8080/api/productsList")
+    } else {
+        errorDelete.innerHTML = `<p>Some data is missing</p>`
+    }
+}
+
+async function deleteAProduct(id) {
+    try {
+        const result = await fetch(`http://localhost:8080/api/products/delete/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
     } catch (error) {
         error
     }

@@ -1,9 +1,17 @@
 import { productsModel } from "../../db/models/products.models.js";
 
 class ProductManager {
-    async findAll() {
-        return productsModel.find()
+    async findAll(opt) {
+        const result = await productsModel.paginate({}, opt)
+        const info = {
+            count: result.totalDocs,
+            pages: result.totalPages,
+            prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
+            next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
+        }
+        return { info, results: result.docs }
     }
+
     async findById(id) {
         return productsModel.findById(id)
     }
