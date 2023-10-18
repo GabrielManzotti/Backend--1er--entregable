@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { cartManager } from '../dao/entities/cart.js'
 import { cartsManager } from '../dao/managers/cartsManager.js'
+import { cartsModel } from '../db/models/cart.models.js'
 const router = Router()
 
 router.post('/', async (req, res) => {
@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/', async (req, res) => {
-    const carts = await cartsManager.findAll()
+    const carts = await cartsManager.findAll(["title", "description", "price"])
     try {
         res.status(200).json({ message: "carts", carts: carts })
     } catch (error) {
@@ -31,7 +31,6 @@ router.get('/:cid', async (req, res) => {
     }
 })
 
-
 router.post('/:cid/product/:pid', async (req, res) => {
     let cartId = req.params.cid
     let productId = req.params.pid
@@ -42,6 +41,8 @@ router.post('/:cid/product/:pid', async (req, res) => {
         return res.status(500).json({ message: "error" })
     }
 })
+
+
 
 router.delete('/delete/:cartId', async (req, res) => {
     const { cartId } = req.params

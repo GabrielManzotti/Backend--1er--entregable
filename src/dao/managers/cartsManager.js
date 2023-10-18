@@ -1,12 +1,16 @@
 import { cartsModel } from "../../db/models/cart.models.js";
 
 class CartManager {
-    async findAll() {
-        return cartsModel.find().lean()
+
+    async findAll(atributes) {
+        const carts = await cartsModel.find().populate("products.productId", atributes)
+        return carts
     }
+
     async findById(id) {
         return cartsModel.findById(id)
     }
+
     async createOne(obj) {
         return cartsModel.create(obj)
     }
@@ -14,13 +18,12 @@ class CartManager {
     async updateOne(cartId, productId) {
         const foundCart = await cartsModel.findById(cartId)
         const foundProduct = foundCart.products.find(
-            (product) => product.productId === productId
+            (product) => product.productId == productId
         );
         if (foundProduct) {
             foundProduct.quantity++;
         } else {
             foundCart.products = [
-
                 ...foundCart.products,
                 ...[{ productId: productId, quantity: 1 }],
             ];
@@ -35,4 +38,5 @@ class CartManager {
         return cartsModel.deleteOne({ _id: id });
     }
 }
+
 export const cartsManager = new CartManager();

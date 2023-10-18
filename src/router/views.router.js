@@ -1,9 +1,11 @@
 import { Router } from "express";
+import { productsManager } from "../dao/managers/productsManager.js";
 
 const router = Router()
 
-router.get("/", (req, res) => {
-    res.render('createProducts')
+router.get("/", async (req, res) => {
+    const result = await productsManager.find({})
+    res.render('products', { result })
 })
 
 router.get('/productsList', (req, res) => {

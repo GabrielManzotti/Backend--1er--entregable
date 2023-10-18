@@ -12,6 +12,46 @@ class ProductManager {
         return { info, results: result.docs }
     }
 
+    async find() {
+        return productsModel.find().lean()
+    }
+
+    async findByCategory(category, opt) {
+        const result = await productsModel.paginate({ category: category }, opt)
+        const info = {
+            count: result.totalDocs,
+            pages: result.totalPages,
+            prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : "none",
+            next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : "none"
+        }
+        return { info, results: result.docs }
+    }
+
+    async findByPrice(price, opt) {
+        const result = await productsModel.paginate({ price: { $gte: price } }, opt)
+        const info = {
+            count: result.totalDocs,
+            pages: result.totalPages,
+            prev: result.hasPrevPage ? `http://localhost:8080/api/products/price/${price}?page=${result.prevPage}` : "none",
+            next: result.hasNextPage ? `http://localhost:8080/api/products/price/${price}?page=${result.nextPage}` : "none"
+        }
+        return { info, results: result.docs }
+    }
+
+    async findAgregationByCategoryAndPrice(category, price, opt) {
+        const response = await productsManager.aggregate([
+            { $match: { price: category } },
+            { $match: { price: { $gt: price } } }
+        ], opt)
+        const info = {
+            count: result.totalDocs,
+            pages: result.totalPages,
+            prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : "none",
+            next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : "none"
+        }
+        return { info, results: result.docs }
+    }
+
     async findById(id) {
         return productsModel.findById(id)
     }

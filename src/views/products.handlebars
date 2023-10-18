@@ -1,0 +1,14 @@
+{{#each result}}
+  <p>Title: {{title}} </p>
+  <p>Description: {{description}} </p>
+  <p>Code: {{code}} </p>
+  <p>Price: {{price}} </p>
+  <p>Status: {{status}} </p>
+  <p>Category: {{category}} </p>
+  <input type="submit" id="{{_id}}" onclick="" value="Agregar al carrito" />
+  <p>----------------------------</p>
+
+{{/each}}
+
+<div id="productsList"></div>
+<script type="module" src="/js/products.js"></script>

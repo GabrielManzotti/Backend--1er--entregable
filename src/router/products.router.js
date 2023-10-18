@@ -32,6 +32,38 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/category/:category/price/:price', async (req, res) => {
+    let category = req.params.category
+    let price = req.params.price
+    try {
+        const result = await productsManager.findByCategory(category, price, req.query)
+
+        if (result) {
+            return res.status(200).json({ message: "Product", Products: result })
+        } else {
+            return res.status(400).json({ message: "no found produducts" })
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "error!" })
+    }
+})
+
+router.get('/price/:price', async (req, res) => {
+    const { price } = req.params
+    try {
+        const products = await productsManager.findByPrice(price, req.query)
+        if (products) {
+            return res.status(200).json({ message: "Products", Products: products })
+        } else {
+            return res.status(404).json({ message: "no found produducts" })
+        }
+    } catch (error) {
+        return res.status(500).json({ message: "error!" })
+    }
+})
+
+
+
 router.get('/:idProduct', async (req, res) => {
     const { idProduct } = req.params
     try {
@@ -50,7 +82,7 @@ router.get('/:idProduct', async (req, res) => {
 router.get('/category/:category', async (req, res) => {
     const { category } = req.params
     try {
-        const result = await productsManager.findById(category)
+        const result = await productsManager.findByCategory(category, req.query)
 
         if (result) {
             return res.status(200).json({ message: "Product", Products: result })
