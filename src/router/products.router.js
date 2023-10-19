@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { productManager } from '../dao/entities/script2doEntregable.js'
+//FILE SYSTEM
+// import { productManager } from '../dao/entities/script2doEntregable.js'
 import { productsManager } from '../dao/managers/productsManager.js'
 const router = Router()
-
 
 router.post('/', async (req, res) => {
     const { title, description, code, price, status, stock, category, thumbnail, } = req.body
@@ -26,7 +26,6 @@ router.get('/', async (req, res) => {
         } else {
             return res.status(404).json({ message: "no found produducts" })
         }
-
     } catch (error) {
         return res.status(500).json({ message: "error!" })
     }
@@ -37,7 +36,6 @@ router.get('/category/:category/price/:price', async (req, res) => {
     let price = req.params.price
     try {
         const result = await productsManager.findByCategory(category, price, req.query)
-
         if (result) {
             return res.status(200).json({ message: "Product", Products: result })
         } else {
@@ -61,8 +59,6 @@ router.get('/price/:price', async (req, res) => {
         return res.status(500).json({ message: "error!" })
     }
 })
-
-
 
 router.get('/:idProduct', async (req, res) => {
     const { idProduct } = req.params
@@ -114,6 +110,8 @@ router.delete('/delete/:idProduct', async (req, res) => {
     }
 })
 
+//--------------------------------------------------------------------//
+//FILE SYSTEM
 //router con fileSystem
 // router.get('/', async (req, res) => {
 //     try {

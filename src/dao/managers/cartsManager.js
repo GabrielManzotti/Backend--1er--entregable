@@ -15,13 +15,33 @@ class CartManager {
         return cartsModel.create(obj)
     }
 
-    async updateOne(cartId, productId) {
+    async addAProductInCart(cartId, productId, quantity) {
+        console.log("quantity", quantity);
         const foundCart = await cartsModel.findById(cartId)
         const foundProduct = foundCart.products.find(
             (product) => product.productId == productId
         );
         if (foundProduct) {
-            foundProduct.quantity++;
+            foundProduct.quantity = foundProduct.quantity + +quantity;
+        } else {
+            foundCart.products = [
+                ...foundCart.products,
+                ...[{ productId: productId, quantity: 1 }],
+            ];
+        }
+        await foundCart.save();
+        return foundCart
+    } catch(error) {
+        error;
+    }
+
+    async updateAProductInCart(cartId, productId, quantity) {
+        const foundCart = await cartsModel.findById(cartId)
+        const foundProduct = foundCart.products.find(
+            (product) => product.productId == productId
+        );
+        if (foundProduct) {
+            foundProduct.quantity = quantity;
         } else {
             foundCart.products = [
                 ...foundCart.products,
@@ -36,6 +56,24 @@ class CartManager {
 
     async deleteOne(id) {
         return cartsModel.deleteOne({ _id: id });
+    }
+
+    async deleteAProductInCart(cartId, productId) {
+        try {
+            const foundCart = await cartsModel.findById(cartId)
+            const foundProduct = foundCart.products.find(
+                (product) => product.productId == productId
+            );
+            if (foundProduct) {
+                foundCart.products = foundCart.products.filter(
+                    (product) => product.productId.toString() !== productId
+                );
+            }
+            await foundCart.save();
+            return foundCart;
+        } catch (error) {
+            return "Product not deleted";
+        }
     }
 }
 

@@ -34,15 +34,26 @@ router.get('/:cid', async (req, res) => {
 router.post('/:cid/product/:pid', async (req, res) => {
     let cartId = req.params.cid
     let productId = req.params.pid
+    const { quantity } = req.body
     try {
-        const result = await cartsManager.updateOne(cartId, productId)
+        const result = await cartsManager.addAProductInCart(cartId, productId, quantity)
         return res.status(200).json({ message: "Product added", Cart: result })
     } catch (error) {
         return res.status(500).json({ message: "error" })
     }
 })
 
-
+router.put('/:cid/product/:pid', async (req, res) => {
+    let cartId = req.params.cid
+    let productId = req.params.pid
+    const { quantity } = req.body
+    try {
+        const result = await cartsManager.updateAProductInCart(cartId, productId, quantity)
+        return res.status(200).json({ message: "Product modified", Cart: result })
+    } catch (error) {
+        return res.status(500).json({ message: "error" })
+    }
+})
 
 router.delete('/delete/:cartId', async (req, res) => {
     const { cartId } = req.params
@@ -54,6 +65,27 @@ router.delete('/delete/:cartId', async (req, res) => {
     }
 })
 
+router.post('/:cid/product/:pid', async (req, res) => {
+    let cartId = req.params.cid
+    let productId = req.params.pid
+    try {
+        const result = await cartsManager.updateOne(cartId, productId)
+        return res.status(200).json({ message: "Product added", Cart: result })
+    } catch (error) {
+        return res.status(500).json({ message: "error" })
+    }
+})
+
+router.delete('/:cid/product/:pid', async (req, res) => {
+    let cartId = req.params.cid
+    let productId = req.params.pid
+    try {
+        const result = await cartsManager.deleteAProductInCart(cartId, productId)
+        return res.status(200).json({ message: "Product delete", Cart: result })
+    } catch (error) {
+        return res.status(500).json({ message: "error" })
+    }
+})
 
 //---------router con fileSystem---------------
 

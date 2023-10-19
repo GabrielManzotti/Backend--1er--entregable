@@ -6,8 +6,10 @@ class ProductManager {
         const info = {
             count: result.totalDocs,
             pages: result.totalPages,
-            prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
-            next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
+            prevPage: result.hasPrevPage,
+            nextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : null,
+            nextLink: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : null
         }
         return { info, results: result.docs }
     }
@@ -21,6 +23,8 @@ class ProductManager {
         const info = {
             count: result.totalDocs,
             pages: result.totalPages,
+            prevPage: result.hasPrevPage,
+            nextPage: result.hasNextPage,
             prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : "none",
             next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : "none"
         }
@@ -32,6 +36,8 @@ class ProductManager {
         const info = {
             count: result.totalDocs,
             pages: result.totalPages,
+            prevPage: result.hasPrevPage,
+            nextPage: result.hasNextPage,
             prev: result.hasPrevPage ? `http://localhost:8080/api/products/price/${price}?page=${result.prevPage}` : "none",
             next: result.hasNextPage ? `http://localhost:8080/api/products/price/${price}?page=${result.nextPage}` : "none"
         }
@@ -46,6 +52,8 @@ class ProductManager {
         const info = {
             count: result.totalDocs,
             pages: result.totalPages,
+            prevPage: result.hasPrevPage,
+            nextPage: result.hasNextPage,
             prev: result.hasPrevPage ? `http://localhost:8080/api/products?page=${result.prevPage}` : "none",
             next: result.hasNextPage ? `http://localhost:8080/api/products?page=${result.nextPage}` : "none"
         }
