@@ -7,8 +7,8 @@ class CartManager {
         return carts
     }
 
-    async findById(id) {
-        return cartsModel.findById(id)
+    async findById(id, atributes) {
+        return cartsModel.findById(id).populate("products.productId", atributes)
     }
 
     async createOne(obj) {
@@ -16,7 +16,6 @@ class CartManager {
     }
 
     async addAProductInCart(cartId, productId, quantity) {
-        console.log("quantity", quantity);
         const foundCart = await cartsModel.findById(cartId)
         const foundProduct = foundCart.products.find(
             (product) => product.productId == productId

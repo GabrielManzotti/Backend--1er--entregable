@@ -22,9 +22,9 @@ router.get('/', async (req, res) => {
 })
 
 router.get('/:cid', async (req, res) => {
-    const { idCart } = req.params
+    const idCart = req.params.cid
     try {
-        const cart = await cartsManager.findById(idCart)
+        const cart = await cartsManager.findById(idCart, ["title", "description", "price"])
         return res.status(200).json({ message: "Cart", Cart: cart })
     } catch (error) {
         return res.status(500).json({ message: "error" })
